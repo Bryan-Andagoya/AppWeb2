@@ -11,7 +11,7 @@ func main() {
 	fmt.Println("Hello World")
 }
 
-func calculateFrameScore(rolls ...string) (int, error) {
+func calculateFrameScore(rolls ...string) (uint, error) {
 	switch len(rolls) {
 	case 1:
 		return parseStringToInt(rolls[0])
@@ -22,7 +22,7 @@ func calculateFrameScore(rolls ...string) (int, error) {
 	return 0, errors.New("too many args")
 }
 
-func calculateScoreForTwoRolls(rolls ...string) (sum int, err error) {
+func calculateScoreForTwoRolls(rolls ...string) (sum uint, err error) {
 	v1, err := parseStringToInt(rolls[0])
 
 	if err != nil {
@@ -36,13 +36,25 @@ func calculateScoreForTwoRolls(rolls ...string) (sum int, err error) {
 	if err != nil {
 		return 0, err
 	}
+
+	if v1 > 9 || v2 > 9 {
+		return 0, errors.New("invalid score")
+	}
+
 	return v1 + v2, nil
 }
 
-func parseStringToInt(s string) (int, error) {
-	if strings.ToLower(s) == "x" {
+func parseStringToInt(s string) (uint, error) {
+	s = strings.ToLower(s)
+
+	switch s {
+	case "x":
 		return 10, nil
+	case "-":
+		return 0, nil
 	}
 
-	return strconv.Atoi(s)
+	i, err := strconv.Atoi(s)
+
+	return uint(i), err
 }
