@@ -57,16 +57,24 @@ func (f *Frame) calculateScore() {
 	var value uint
 	var err error
 
-	switch len(f.rolls) {
+	switch len((*f).rolls) {
 	case 1:
-		value, err = parseStringToInt(f.rolls[0])
+		value, err = parseStringToInt((*f).rolls[0])
 	case 2:
-		value, err = calculateScoreForTwoRolls(f.rolls...)
+		value, err = calculateScoreForTwoRolls((*f).rolls...)
 	default:
 		err = errors.New("too many args")
 	}
 
 	if err == nil {
-		f.score = value
+		(*f).score = value
 	}
 }
+
+type Stack []Frame
+
+func (s *Stack) isEmpty() bool {
+	return len(*s) == 0
+}
+
+func (s *Stack) push(f Frame) {}
