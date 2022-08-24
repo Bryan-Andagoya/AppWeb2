@@ -11,17 +11,6 @@ func main() {
 	fmt.Println("Hello World")
 }
 
-func calculateFrameScore(rolls ...string) (uint, error) {
-	switch len(rolls) {
-	case 1:
-		return parseStringToInt(rolls[0])
-	case 2:
-		return calculateScoreForTwoRolls(rolls...)
-	}
-
-	return 0, errors.New("too many args")
-}
-
 func calculateScoreForTwoRolls(rolls ...string) (sum uint, err error) {
 	v1, err := parseStringToInt(rolls[0])
 
@@ -57,4 +46,27 @@ func parseStringToInt(s string) (uint, error) {
 	i, err := strconv.Atoi(s)
 
 	return uint(i), err
+}
+
+type Frame struct {
+	score uint
+	rolls []string
+}
+
+func (f *Frame) calculateScore() {
+	var value uint
+	var err error
+
+	switch len(f.rolls) {
+	case 1:
+		value, err = parseStringToInt(f.rolls[0])
+	case 2:
+		value, err = calculateScoreForTwoRolls(f.rolls...)
+	default:
+		err = errors.New("too many args")
+	}
+
+	if err == nil {
+		f.score = value
+	}
 }

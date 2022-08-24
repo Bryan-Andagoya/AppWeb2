@@ -6,30 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBowling(t *testing.T) {
-	v, err := calculateFrameScore("4", "4")
-	assert.Equal(t, uint(8), v)
-	assert.Nil(t, err)
-	v, err = calculateFrameScore("4", "/")
-	assert.Equal(t, uint(10), v)
-	assert.Nil(t, err)
-	v, err = calculateFrameScore("x")
-	assert.Equal(t, uint(10), v)
-	assert.Nil(t, err)
-	v, err = calculateFrameScore("4", "3", "3")
-	assert.Equal(t, uint(0), v)
-	assert.NotNil(t, err)
-	v, err = calculateFrameScore("4", "abc")
-	assert.Equal(t, uint(0), v)
-	assert.NotNil(t, err)
-	v, err = calculateFrameScore("abc", "5")
-	assert.Equal(t, uint(0), v)
-	assert.NotNil(t, err)
-	v, err = calculateFrameScore()
-	assert.Equal(t, uint(0), v)
-	assert.NotNil(t, err)
-}
-
 func TestParseStringToInt(t *testing.T) {
 	v, err := parseStringToInt("4")
 	assert.Equal(t, uint(4), v)
@@ -97,4 +73,61 @@ func TestCalculateScoreForTwoRolls(t *testing.T) {
 	v, err = calculateScoreForTwoRolls("/", "-")
 	assert.Equal(t, uint(0), v)
 	assert.NotNil(t, err)
+}
+
+func TestFrameCalculateScore(t *testing.T) {
+	f := Frame{}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"4", "4"}}
+	f.calculateScore()
+	assert.Equal(t, uint(8), f.score)
+	f = Frame{rolls: []string{"4", "/"}}
+	f.calculateScore()
+	assert.Equal(t, uint(10), f.score)
+	f = Frame{rolls: []string{"x"}}
+	f.calculateScore()
+	assert.Equal(t, uint(10), f.score)
+	f = Frame{rolls: []string{"x", "x"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"23", "3"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"3", "3", "4"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"-1", "3"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"/", "3"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"/", "/"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"/", "-"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"-", "-"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"-", "8"}}
+	f.calculateScore()
+	assert.Equal(t, uint(8), f.score)
+	f = Frame{rolls: []string{"8", "-"}}
+	f.calculateScore()
+	assert.Equal(t, uint(8), f.score)
+	f = Frame{rolls: []string{"abc", "-"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"abc", "/"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"4", "abc"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
+	f = Frame{rolls: []string{"abc", "4"}}
+	f.calculateScore()
+	assert.Equal(t, uint(0), f.score)
 }
