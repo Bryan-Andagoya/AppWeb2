@@ -6,6 +6,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestMain(t *testing.T) {
+	assert.NotPanics(t, main)
+}
+
 func TestParseStringToInt(t *testing.T) {
 	v, err := parseStringToInt("4")
 	assert.Equal(t, uint(4), v)
@@ -130,4 +134,40 @@ func TestFrameCalculateScore(t *testing.T) {
 	f = Frame{rolls: []string{"abc", "4"}}
 	f.calculateScore()
 	assert.Equal(t, uint(0), f.score)
+}
+
+func TestFrameStackIsEmpty(t *testing.T) {
+	var frameStack FrameStack
+	assert.Equal(t, true, frameStack.IsEmpty())
+
+	frameStack.Push(Frame{})
+	assert.Equal(t, false, frameStack.IsEmpty())
+}
+
+func TestFrameStackPush(t *testing.T) {
+	var frameStack FrameStack
+	assert.Equal(t, 0, len(frameStack))
+
+	frameStack.Push(Frame{})
+	assert.Equal(t, 1, len(frameStack))
+}
+
+func TestFrameStackPop(t *testing.T) {
+	var frameStack FrameStack
+	frameStack.Push(Frame{})
+	assert.Equal(t, 1, len(frameStack))
+
+	frameStack.Push(Frame{})
+	assert.Equal(t, 2, len(frameStack))
+
+	_, ok := frameStack.Pop()
+	assert.Equal(t, 1, len((frameStack)))
+	assert.Equal(t, true, ok)
+
+	_, ok = frameStack.Pop()
+	assert.Equal(t, 0, len((frameStack)))
+	assert.Equal(t, true, ok)
+
+	_, ok = frameStack.Pop()
+	assert.Equal(t, false, ok)
 }

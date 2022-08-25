@@ -71,10 +71,23 @@ func (f *Frame) calculateScore() {
 	}
 }
 
-type Stack []Frame
+type FrameStack []Frame
 
-func (s *Stack) isEmpty() bool {
-	return len(*s) == 0
+func (stack *FrameStack) IsEmpty() bool {
+	return len(*stack) == 0
 }
 
-func (s *Stack) push(f Frame) {}
+func (stack *FrameStack) Push(frame Frame) {
+	*stack = append(*stack, frame)
+}
+
+func (stack *FrameStack) Pop() (Frame, bool) {
+	if stack.IsEmpty() {
+		return Frame{}, false
+	}
+
+	topIndex := len(*stack) - 1
+	topFrame := (*stack)[topIndex]
+	*stack = (*stack)[:topIndex]
+	return topFrame, true
+}
