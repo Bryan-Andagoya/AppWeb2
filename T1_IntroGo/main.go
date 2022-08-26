@@ -71,6 +71,10 @@ func (f *Frame) calculateScore() {
 	}
 }
 
+func (f *Frame) GetTwoRollsScore() (uint, error) {
+	return 0, nil
+}
+
 type FrameStack []Frame
 
 func (stack *FrameStack) IsEmpty() bool {
@@ -90,4 +94,22 @@ func (stack *FrameStack) Pop() (Frame, bool) {
 	topFrame := (*stack)[topIndex]
 	*stack = (*stack)[:topIndex]
 	return topFrame, true
+}
+
+func (stack FrameStack) CalculateTotalScore() (totalScore uint) {
+	for i := 0; i < 10; i++ {
+		frame := stack[i]
+		frameScore := frame.score
+
+		if strings.ToLower(frame.rolls[0]) == "x" {
+
+		} else if frame.rolls[1] == "/" {
+
+		}
+
+		fmt.Println(frameScore)
+		totalScore += frameScore
+	}
+
+	return
 }

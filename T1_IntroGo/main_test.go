@@ -171,3 +171,37 @@ func TestFrameStackPop(t *testing.T) {
 	_, ok = frameStack.Pop()
 	assert.Equal(t, false, ok)
 }
+
+func TestFrameStackCalculateTotalScore(t *testing.T) {
+	var frameStack FrameStack
+
+	for i := 0; i < 12; i++ {
+		frame := Frame{rolls: []string{"X"}}
+		frame.calculateScore()
+		frameStack.Push(frame)
+	}
+	assert.Equal(t, uint(300), frameStack.CalculateTotalScore())
+
+	frameStack = FrameStack{}
+
+	for i := 0; i < 10; i++ {
+		frame := Frame{rolls: []string{"9", "-"}}
+		frame.calculateScore()
+		frameStack.Push(frame)
+	}
+	assert.Equal(t, uint(90), frameStack.CalculateTotalScore())
+
+	frameStack = FrameStack{}
+
+	for i := 0; i < 10; i++ {
+		frame := Frame{rolls: []string{"5", "/"}}
+		frame.calculateScore()
+		frameStack.Push(frame)
+	}
+
+	frame := Frame{rolls: []string{"5"}}
+	frame.calculateScore()
+	frameStack.Push(frame)
+
+	assert.Equal(t, uint(150), frameStack.CalculateTotalScore())
+}
