@@ -131,3 +131,47 @@ func TestFrameCalculateScore(t *testing.T) {
 	f.calculateScore()
 	assert.Equal(t, uint(0), f.score)
 }
+
+func TestLinkedListInsert(t *testing.T) {
+	var linkedList LinkedList
+	linkedList.Insert(Frame{rolls: []string{"4", "-"}})
+
+	assert.Equal(t, uint(1), linkedList.length)
+	assert.Equal(t, "4", linkedList.head.key.rolls[0])
+	assert.Equal(t, "-", linkedList.head.key.rolls[1])
+	assert.Equal(t, "4", linkedList.tail.key.rolls[0])
+	assert.Equal(t, "-", linkedList.tail.key.rolls[1])
+	assert.Nil(t, linkedList.head.prev)
+	assert.Nil(t, linkedList.head.next)
+	assert.Nil(t, linkedList.tail.prev)
+	assert.Nil(t, linkedList.tail.next)
+
+	linkedList.Insert(Frame{rolls: []string{"X"}})
+	assert.Equal(t, uint(2), linkedList.length)
+	assert.Equal(t, "4", linkedList.head.key.rolls[0])
+	assert.Equal(t, "-", linkedList.head.key.rolls[1])
+	assert.Equal(t, "X", linkedList.tail.key.rolls[0])
+	assert.Nil(t, linkedList.head.prev)
+	assert.NotNil(t, linkedList.head.next)
+	assert.Equal(t, "X", linkedList.head.next.key.rolls[0])
+	assert.Nil(t, linkedList.tail.next)
+	assert.NotNil(t, linkedList.tail.prev)
+	assert.Equal(t, "4", linkedList.tail.prev.key.rolls[0])
+	assert.Equal(t, "-", linkedList.tail.prev.key.rolls[1])
+
+	linkedList.Insert(Frame{rolls: []string{"5", "/"}})
+	assert.Equal(t, uint(3), linkedList.length)
+	assert.Equal(t, "4", linkedList.head.key.rolls[0])
+	assert.Equal(t, "-", linkedList.head.key.rolls[1])
+	assert.Equal(t, "5", linkedList.tail.key.rolls[0])
+	assert.Equal(t, "/", linkedList.tail.key.rolls[1])
+	assert.Nil(t, linkedList.head.prev)
+	assert.NotNil(t, linkedList.head.next)
+	assert.Equal(t, "X", linkedList.head.next.key.rolls[0])
+	assert.Equal(t, "5", linkedList.head.next.next.key.rolls[0])
+	assert.Equal(t, "/", linkedList.head.next.next.key.rolls[1])
+	assert.Nil(t, linkedList.tail.next)
+	assert.NotNil(t, linkedList.tail.prev)
+	assert.Equal(t, "X", linkedList.tail.prev.key.rolls[0])
+
+}

@@ -70,3 +70,36 @@ func (f *Frame) calculateScore() {
 		f.score = value
 	}
 }
+
+type Node struct {
+	prev *Node
+	next *Node
+	key  Frame
+}
+
+type LinkedList struct {
+	head   *Node
+	tail   *Node
+	length uint
+}
+
+func (l *LinkedList) Insert(key Frame) {
+	node := &Node{
+		prev: l.tail,
+		key:  key,
+	}
+
+	if l.tail != nil {
+		l.tail.next = node
+	}
+
+	l.tail = node
+
+	tail := l.tail
+
+	if l.head == nil {
+		l.head = tail
+	}
+
+	l.length++
+}
